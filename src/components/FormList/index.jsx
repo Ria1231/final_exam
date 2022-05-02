@@ -14,7 +14,7 @@ export default function FormList() {
   const submithandler = () => {
     
       
-    history.push("/ContactForm");
+    history.push("/FormCreate");
   }
 //   const edithandler = (data) => {
       
@@ -28,7 +28,7 @@ export default function FormList() {
     <div className="container">
       <div className="row d-flex flex-column">
 
-        <div className="col-md-12 mx-auto my-4 mx-auto shadow">
+        <div className="col-md-12 mx-auto my-4 py-4 mx-auto shadow">
           <table className="table table-hover">
             <thead className="table-header bg-dark text-white">
               <tr>
@@ -70,18 +70,12 @@ export default function FormList() {
                     >
                       Delete
                     </button>
-                    {/* 
-                    <Link to={`/edit/${contacts.id}`}>
-                      <span>edit</span>
-                    </Link> */}
-                    {/* <button onClick={() => edithandler(contacts)}> Update</button> */}
-                    {/* <button onClick={() => edithandler(contacts)} className="btn btn-outline-dark btn-sm ">Update</button> */}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {/* <button type="button" onClick={submithandler} className="btn btn-outline-dark btn-sm ">Add Contact</button> */}
+          <button type="button" onClick={submithandler} className="btn btn-outline-dark btn-sm ">Add User</button>
         </div>
       </div>
     </div>
