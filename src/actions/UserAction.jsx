@@ -15,3 +15,13 @@ export const DeleteUser = (deletedata) => (
     
     }
 );
+
+export const GetUser = (getdata) => (
+    console.log("getContactAction", getdata),
+    {
+        type: "GET_USER",
+        payload: getdata,
+    
+    }
+);
+

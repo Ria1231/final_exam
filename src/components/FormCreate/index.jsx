@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, FormSelect } from "react-bootstrap";
-import { AddUser } from "../../actions/UserAction";
+import { AddUser,GetUser } from "../../actions/UserAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import shortid from "shortid";
@@ -19,22 +19,22 @@ export const FormCreate = () => {
 
 
     //validation
-    const [formvalue, setFormvalue]= useState({ fname:'',lname:'',member_name:'',gender:'',email:''});
+    const [formvalue, setFormvalue]= useState({ fname:'',lname:'',gender:'',email:''});
     const [formerror, setFormerror] = useState({});
-    const [issubmit, setSubmit]= useState(false);
+    const [issubmit, setSubmit]= useState(true);
 
 
-    const [inputList, setinputList]= useState([{member_name:''}]);
+    const [inputList, setinputList]= useState([{mid:shortid.generate(),name:''}]);
 
     const handleinputchange=(e, index)=>{
         const {name, value}= e.target;
         const list= [...inputList];
-        
+        console.log(list);
         list[index][name]= value;
         setinputList(list);    
       }
       const handleaddclick=()=>{ 
-        setinputList([...inputList, { member_name:''}]);
+        setinputList([...inputList, { mid:shortid.generate(),name:''}]);
       }
 
       const onInputChange = (e) => {
@@ -60,13 +60,44 @@ export const FormCreate = () => {
         
       }
 
-      const handleremove= index=>{
+      const handleremove= (e)=>{        
         const list=[...inputList];
-        list.splice(index,1);
+        // var index = list.indexOf(e.target.value)
+        list.splice(e.mid,1);
         setinputList(list);
       }
 
+      // function handleremove(id) {
+      //   console.log("remove id",id);
+      //   const a=[...inputList];
+      //   const newList = a.filter((item) => item.mid !== id);
+      //   setinputList(newList);
+      // }
+ const validationform = (value)=>{
+        const errors= {};
+        const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+        if(!value.fname && value.fname>3){
+          errors.fname="Please Enter First Name";
+        }
+        if(!value.lname && value.fname>3){
+          errors.lname="Please Enter Last Name";
+        }
+        
+        if(!value.email){
+            errors.email="Please Enter Email";
+        } else if(!emailPattern.test(value.email))
+        {
+            errors.email="Enter Valid Email";
+        }
+        
+        return errors;
+    }
       const submithandler = (e) => {
+        e.preventDefault();
+        setFormerror(validationform(formvalue));
+               
          
         const data={
             id:shortid.generate(),
@@ -80,22 +111,30 @@ export const FormCreate = () => {
         }
         console.log(data);
 
-        // const formdata = {
-        //   id: shortid.generate(),
-        //   Email: Email,
-        //   Number: number,
-        // };
-        // dispatch(getContact(""));
+       
+        dispatch(GetUser(""));
         dispatch(AddUser(data));
         console.log("formdata" + JSON.stringify(data));
-      history.push("/");
+        history.push("/");
       }
+
+      useEffect( ()=>{
+        if(formvalue.fname!=""&& formvalue.lname!="" && formvalue.email!="" && formvalue.gender!="" && marital!="" ){
+          setSubmit(false);
+        }
+        
+        if(Object.keys(formerror).length===0 )
+        {          
+            console.log(formvalue);
+        }
+      },[formerror, formvalue, issubmit]);
+
 
   return (
     <Container className="content">
      <div className="row">
      <div className="col-md-6 p-3 m-2 mx-auto shadow">
-     <h5 className="fw-bold text-center" style={{ fontSize: 24, fontWeight: "bold" }}>Enter Your Details</h5>
+     <h5 className="fw-bold text-center" style={{ fontSize: 24, fontWeight: "bold" }}>Enter User Details</h5>
      <form >
         <div className="form-group m-5">  
             
@@ -109,7 +148,7 @@ export const FormCreate = () => {
                     // onChange={(e) => setFname(e.target.value)}
                     
                     onChange={onInputChange}
-                />
+                /><span className="text-danger">{ formerror.fname }</span>
                 </div>
 
                 <div class="form-group col-md-12 mt-3">
@@ -121,7 +160,7 @@ export const FormCreate = () => {
                         value={formvalue.lname}
                         // onChange={(e) => setLname(e.target.value)}
                         onChange={onInputChange}
-                    />
+                    /><span className="text-danger">{ formerror.lname }</span>
                 </div>
             
                 <div class="form-group col-md-12 mt-3">
@@ -134,7 +173,7 @@ export const FormCreate = () => {
                     value={formvalue.email}
                     // onChange={(e) => setEmail(e.target.value)}
                     onChange={onInputChange}
-                />
+                /><span className="text-danger">{ formerror.email }</span>
                 </div>
 
                 <div class="form-group col-md-12 mt-3">
@@ -142,11 +181,11 @@ export const FormCreate = () => {
                     <option>Open this select Gender</option>
                     <option value="male">Male</option>
                     <option value="Female">Female</option>
-                </FormSelect>
+                </FormSelect><span className="text-danger">{ formerror.gender }</span>
                 </div>
 
                 <div class="form-group col-md-12 mt-3">
-                <label class="form-check-label" for="radio2">Marital Status</label>
+                <label class="form-check-label" for="radio2">Marital Status</label><span className="text-danger">{ formerror.martial }</span>
                 <div class="form-check">
                     <input type="radio" class="form-check-input" id="radio1" name="marital_status" value="married" onChange={onInputChange} />Married
                 </div>
@@ -166,7 +205,7 @@ export const FormCreate = () => {
               <div className="row mb-3 ">
                  <div class="form-group col-md-9">
                  <label >Member Name: </label> {i+1}
-                  <input type="text"  name="member_name" class="form-control"  placeholder="Enter Member Name" onChange={ e=>handleinputchange(e,i)} />
+                  <input type="text"  name="name" class="form-control"  placeholder="Enter Member Name" onChange={ e=>handleinputchange(e,i)} />
                </div>
                
                <div class="form-group col-md-3 mt-4">
@@ -190,7 +229,8 @@ export const FormCreate = () => {
        </div>
        <div className="form-group my-3">
               <button
-                // type="submit"
+                type="button"
+                disabled={issubmit?'disabled':null}
                 onClick={submithandler}
                 className="btn btn-block btn-dark"
               >Add Details                

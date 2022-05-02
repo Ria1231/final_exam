@@ -51,9 +51,15 @@ export default function FormList() {
                   <td>{users.Email}</td>
                   <td>{users.Gender}</td>
                   <td>{users.MartialStatus}</td>
-                  <td>{users.Member.map(function(name, index){
+                  {/* <td>{users.Member.map(function(name, index){
                     return <li key={ index }>{name}</li>;
-                  })}</td>
+                  })}</td> */}
+
+                  <td>
+                    {users.Member.map((item) => (
+                      <li key={item.mid}>{item.name}</li>
+                    ))}
+                  </td>
                   <td>
 
                     <button

@@ -7,7 +7,14 @@ const initialstate = {
         Email: "riya@gmail.com",
         Gender:'Female',
         MartialStatus:'Unmarried',
-        Member:['Prem','Pratham']
+        Member:[{
+          mid: 'a',
+          name: 'riya',
+        },
+        {
+          mid: 'b',
+          name: 'prem',
+        },]
       },
       {
         id: 2,  
@@ -16,7 +23,15 @@ const initialstate = {
         Email: "prem@gmail.com",
         Gender:'Male',
         MartialStatus:'Married',
-        Member:['Anjali','Pratham']
+        Member:[{
+          mid: 'c',
+          name: 'Robin',
+        },
+        {
+          mid: 'd',
+          name: 'Dennis',
+        },
+      ]
       }
     ]
  }
@@ -42,6 +57,23 @@ const initialstate = {
         ),
       };
     }
+    case "GET_USER":
+      {
+        
+        let arr = state.users.filter(
+          (user) => user.id == action.payload
+        );
+        arr = arr.values();        
+        for (let val of arr) {
+          arr = val;
+        }
+        console.log("getReducer", arr);
+        return {
+          ...state,
+          user: arr,
+        };
+
+      }
     default:
       return state;
   }
