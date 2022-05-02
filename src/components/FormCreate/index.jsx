@@ -6,7 +6,7 @@ export const FormCreate = () => {
 
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
-    // const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
     const [gender, setGender] = useState('');
     const [marital, setMarital] = useState('');
 
@@ -32,23 +32,24 @@ export const FormCreate = () => {
 
       const onInputChange = (e) => {
         const {name, value}= e.target;
-        console.log('Input value: ', value);
+        console.log('Input value: ', name,value);
      
         const re = /^[A-Za-z]+$/;
-        const reg= /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.+[a-z._-]+/;
+        const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         ;
-        if (value === "" || re.test(value)) {            
-            setFormvalue({...formvalue, [name]: value});
-        }
-        if(name=='email'){
-            
-            if (value === "" || reg.test(value)) {            
+        if(name!='email'){
+            if (value === "" || re.test(value)) {            
                 setFormvalue({...formvalue, [name]: value});
             }
-        }
-        if(name='gender'){
-            setFormvalue({...formvalue, [name]: value});
-        }
+            if(name=='marital_status'){
+                setMarital(value);
+            }
+            
+        }else{
+        // if(emailPattern.test(value)){
+            setFormvalue({...formvalue, [name]: value});            
+        // }
+    }
         
       }
 
@@ -59,10 +60,13 @@ export const FormCreate = () => {
       }
 
       const submithandler = (e) => {
+         
         const data={
             fname:formvalue.fname,
             lname:formvalue.lname,
-            gender:formvalue.gender
+            email:formvalue.email,
+            gender:formvalue.gender,
+            martial:marital
         }
         console.log(data);
       }
@@ -124,10 +128,10 @@ export const FormCreate = () => {
                 <div class="form-group col-md-12 mt-3">
                 <label class="form-check-label" for="radio2">Marital Status</label>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" id="radio1" name="marital_status" value="option1" checked />Option 1
+                    <input type="radio" class="form-check-input" id="radio1" name="marital_status" value="married" onChange={onInputChange} />Married
                 </div>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" id="radio2" name="marital_status" value="option2" />Option 2
+                    <input type="radio" class="form-check-input" id="radio2" name="marital_status" value="Unmarried" onChange={onInputChange} />Unmarried
                 </div>
                 </div>
             
@@ -142,7 +146,7 @@ export const FormCreate = () => {
               <div className="row mb-3 ">
                  <div class="form-group col-md-9">
                  <label >Member Name: </label> {i+1}
-                  <input type="text"  name="member_name" class="form-control"  placeholder="Enter First Name" onChange={ e=>handleinputchange(e,i)} />
+                  <input type="text"  name="member_name" class="form-control"  placeholder="Enter Member Name" onChange={ e=>handleinputchange(e,i)} />
                </div>
                
                <div class="form-group col-md-3 mt-4">
