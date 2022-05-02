@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { Container, FormSelect } from "react-bootstrap";
+import { AddUser } from "../../actions/UserAction";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import shortid from "shortid";
 
 
 export const FormCreate = () => {
+    //history and dispatch
+    let history = useHistory();
+    const dispatch = useDispatch();
 
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
@@ -17,7 +24,7 @@ export const FormCreate = () => {
     const [issubmit, setSubmit]= useState(false);
 
 
-    const [inputList, setinputList]= useState([{firstName:'', lastName:''}]);
+    const [inputList, setinputList]= useState([{member_name:''}]);
 
     const handleinputchange=(e, index)=>{
         const {name, value}= e.target;
@@ -27,7 +34,7 @@ export const FormCreate = () => {
         setinputList(list);    
       }
       const handleaddclick=()=>{ 
-        setinputList([...inputList, { firstName:'', lastName:''}]);
+        setinputList([...inputList, { member_name:''}]);
       }
 
       const onInputChange = (e) => {
@@ -62,13 +69,26 @@ export const FormCreate = () => {
       const submithandler = (e) => {
          
         const data={
-            fname:formvalue.fname,
-            lname:formvalue.lname,
-            email:formvalue.email,
-            gender:formvalue.gender,
-            martial:marital
+            id:shortid.generate(),
+            FirstName:formvalue.fname,
+            LastName:formvalue.lname,
+            Email:formvalue.email,
+            Gender:formvalue.gender,
+            MartialStatus:marital,
+            Member:inputList
+
         }
         console.log(data);
+
+        // const formdata = {
+        //   id: shortid.generate(),
+        //   Email: Email,
+        //   Number: number,
+        // };
+        // dispatch(getContact(""));
+        dispatch(AddUser(data));
+        console.log("formdata" + JSON.stringify(data));
+      history.push("/");
       }
 
   return (

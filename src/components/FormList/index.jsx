@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { AddUser } from "../../actions/UserAction";
+import { AddUser,DeleteUser } from "../../actions/UserAction";
 
 
 
@@ -28,13 +28,17 @@ export default function FormList() {
     <div className="container">
       <div className="row d-flex flex-column">
 
-        <div className="col-md-10 mx-auto my-4">
+        <div className="col-md-12 mx-auto my-4 mx-auto shadow">
           <table className="table table-hover">
             <thead className="table-header bg-dark text-white">
               <tr>
                 <th scope="col">Id</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
-                <th scope="col">Mobile</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Martial Status</th>
+                <th scope="col">Members</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -42,18 +46,25 @@ export default function FormList() {
               {userSelector.map(users => (
                 <tr>
                   <td>{users.id}</td>
+                  <td>{users.FirstName}</td>
+                  <td>{users.LastName}</td>
                   <td>{users.Email}</td>
-                  <td>{users.Number}</td>
+                  <td>{users.Gender}</td>
+                  <td>{users.MartialStatus}</td>
+                  <td>{users.Member.map(function(name, index){
+                    return <li key={ index }>{name}</li>;
+                  })}</td>
                   <td>
 
-                    {/* <button
+                    <button
                       type="button"
-                      onClick={() => dispatch(DeleteContact(contacts.id))}
+                      onClick={() => dispatch(DeleteUser(users.id))}
                       // onClick={deleteda}
                       className="btn btn-sm btn-danger mx-3"
                     >
                       Delete
                     </button>
+                    {/* 
                     <Link to={`/edit/${contacts.id}`}>
                       <span>edit</span>
                     </Link> */}

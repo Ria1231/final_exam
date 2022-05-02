@@ -29,9 +29,18 @@ const initialstate = {
       console.log("state", state)
       return {
         ...state,
-        contacts: [action.payload, ...state.contacts],
+        users: [action.payload, ...state.users],
       };
       
+    }
+    case "DELETE_USER":
+    {
+      return {
+        ...state,
+        users: state.users.filter(
+        (user) => user.id != action.payload
+        ),
+      };
     }
     default:
       return state;

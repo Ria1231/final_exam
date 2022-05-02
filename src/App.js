@@ -18,6 +18,7 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route path="/" exact component={FormList} />
+            <Route path="/FormCreate" exact component={FormCreate} />
           </Switch>
         </BrowserRouter>
       </Provider>
